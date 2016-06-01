@@ -20,8 +20,24 @@ public class HudsonLogAnalyzer extends LogFileQuerier {
         // [31/May/2016:03:18:50 +0000] 16.178.110.132 TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 "POST /hudson/view/200456-mdcp-mdm/view/200456-mdm-hpe/view/2
         
         String path = "C:\\Users\\shijie\\Desktop\\nexus_log\\";
-        HudsonLogAnalyzer hudsonLogAnalyzer = new HudsonLogAnalyzer();
-        hudsonLogAnalyzer.query(path);
+        HudsonLogAnalyzer logAnalyzer = new HudsonLogAnalyzer();
+        //logAnalyzer.query(path);
+        
+        System.out.println("Hudson metrics report:");
+        System.out.println("Date: 20160528 --- 20160531");
+        logAnalyzer.query(path, "20160528", "20160531");
+        
+        System.out.println("Date: 20160528");
+        logAnalyzer.query(path, "20160528");
+
+        System.out.println("Date: 20160529");
+        logAnalyzer.query(path, "20160529");
+
+        System.out.println("Date: 20160530");
+        logAnalyzer.query(path, "20160530");
+
+        System.out.println("Date: 20160531");
+        logAnalyzer.query(path, "20160531");
     }
 
     /**

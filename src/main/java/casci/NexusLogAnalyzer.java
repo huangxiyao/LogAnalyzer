@@ -20,8 +20,23 @@ public class NexusLogAnalyzer extends LogFileQuerier {
         //16.85.88.18 - - [31/May/2016:03:18:19 +0000] "GET /nexus/content/repositories/snapshots/com/hp/ts/201377/selenium-core-fw/2.0.0-SNAPSHOT/maven-metadata.xml HTTP/1.1" 200 1008 "-" "Apache-Maven/3.2.1 (Java 1.8.0_72-internal; Linux 3.10.0-229.el7.x86_64)"
         
         String path = "C:\\Users\\shijie\\Desktop\\nexus_log\\";
-        NexusLogAnalyzer nexusLogAnalyzer = new NexusLogAnalyzer();
-        nexusLogAnalyzer.query(path);
+        NexusLogAnalyzer logAnalyzer = new NexusLogAnalyzer();
+        
+        System.out.println("Nexus metrics report:");
+        System.out.println("Date: 20160528 --- 20160531");
+        logAnalyzer.query(path, "20160528", "20160531");
+        
+        System.out.println("Date: 20160528");
+        logAnalyzer.query(path, "20160528");
+
+        System.out.println("Date: 20160529");
+        logAnalyzer.query(path, "20160529");
+
+        System.out.println("Date: 20160530");
+        logAnalyzer.query(path, "20160530");
+
+        System.out.println("Date: 20160531");
+        logAnalyzer.query(path, "20160531");
     }
 
     /**

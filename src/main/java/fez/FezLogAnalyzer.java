@@ -36,8 +36,23 @@ public class FezLogAnalyzer extends LogFileQuerier {
         // sample FEZ line for ssl_access_log
         // 16.250.12.85 - APP-119812-FEZ-PRO [31/May/2016:04:02:43 +0000] "HEAD /fez/119812/IN/UPSI/IN/deviceConfiguration/P.CLQR.LZ_SRVC_OBJ_RELSHP.LZ_SRVC_OBJ_RELSHP.79947.2_4_2.20160531.035643.dat HTTP/1.1" 200 - 202 718 3149
         String path = "C:\\Users\\shijie\\Desktop\\fez_log\\";
-        FezLogAnalyzer fezLogAnalyzer = new FezLogAnalyzer();
-        fezLogAnalyzer.query(path);
+        FezLogAnalyzer logAnalyzer = new FezLogAnalyzer();
+
+        System.out.println("FEZ metrics report:");
+        System.out.println("Date: 20160528 --- 20160531");
+        logAnalyzer.query(path, "20160528", "20160531");
+        
+        System.out.println("Date: 20160528");
+        logAnalyzer.query(path, "20160528");
+
+        System.out.println("Date: 20160529");
+        logAnalyzer.query(path, "20160529");
+
+        System.out.println("Date: 20160530");
+        logAnalyzer.query(path, "20160530");
+
+        System.out.println("Date: 20160531");
+        logAnalyzer.query(path, "20160531");
     }
     
     
