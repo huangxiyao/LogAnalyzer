@@ -2,14 +2,20 @@ package ad;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import util.MutableInt;
 import util.ValueComparator;
@@ -34,7 +40,7 @@ import util.ValueComparator;
  */
 public class GetActiveUsers {
     
-    
+	public static final DecimalFormat format = new DecimalFormat("#0.0000");
     /**
      * 
      * @param args: args[0] dir of log file; args[1] file name (optional)   
@@ -43,6 +49,25 @@ public class GetActiveUsers {
         // for local running        
 //        args = new String[2];
 //        args[0] = "C:\\Users\\shijie\\git\\LogAnalyzer\\data\\g4t8318-data-match3\\";
+        
+        Map<String, String> epridUidMap = new HashMap<String, String>();
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();           
+        try (
+            InputStream stream = loader.getResourceAsStream("eprid_uid_mapping.properties");
+            Reader decoder = new InputStreamReader(stream);
+            BufferedReader br = new BufferedReader(decoder);
+        ){
+            try {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] s = line.split("=");
+                    epridUidMap.put(s[0], s[1]);
+                }
+            } catch (IOException e) {
+            }
+        } catch (IOException e) {
+        }
+        System.out.println(epridUidMap.keySet());
         
         Map<String, MutableInt> freq = new HashMap<String, MutableInt>();
         // FIXME: Dir of ad-service.log or archive file like ad-service-log.2016-04-24.log
@@ -91,10 +116,20 @@ public class GetActiveUsers {
         Collections.sort(list, vc); 
         //System.out.println(list);
         
-        // Print with nice format (copy to excel and create a table easily)
-        for (Entry<String, MutableInt> entry : list) {
-            System.out.println(entry.getKey() + "\t" + entry.getValue());
+        int countOfAllReq = 0;
+        for (String key : freq.keySet()) {
+            countOfAllReq += freq.get(key).get();
         }
+        
+        // Print with nice format (copy to excel and create a table easily)
+        System.out.println("###### Copy below output to excel file ######");
+        System.out.println("App-Instance" + "\t" + "EPR ID" + "\t" + "L2 Business ORG" +"\t" + "Usage %" + "\t" + "# of Address Validations");
+        for (Entry<String, MutableInt> entry : list) {
+        	String eprid_org = epridUidMap.get(entry.getKey());
+        	String[] epridOrgArray = eprid_org.split(",");
+            System.out.println(entry.getKey() + "\t" + epridOrgArray[0] + "\t" + epridOrgArray[1] + "\t" + format.format(entry.getValue().get() * 100.0 / countOfAllReq) + "\t" + entry.getValue());
+        }
+        
     }
 }
 
